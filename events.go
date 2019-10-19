@@ -11,11 +11,13 @@ import (
 	pb "github.com/imorph/proto-calendar/pkg/cal"
 )
 
+// Calendar trying to be thread safe
 type Calendar struct {
 	mx   sync.RWMutex
 	pCal *pb.Calendar
 }
 
+// NewCalendar creates new Calendar
 func NewCalendar() *Calendar {
 	cal := &Calendar{
 		pCal: &pb.Calendar{},
@@ -23,12 +25,14 @@ func NewCalendar() *Calendar {
 	return cal
 }
 
+// AddEvent adds event
 func (c *Calendar) AddEvent(e *pb.Event) {
 	c.mx.Lock()
 	c.pCal.Events = append(c.pCal.Events, e)
 	c.mx.Unlock()
 }
 
+// UpdateEventByName updates Event by name from provided event
 func (c *Calendar) UpdateEventByName(e *pb.Event) {
 	c.mx.Lock()
 	defer c.mx.Unlock()
@@ -40,6 +44,7 @@ func (c *Calendar) UpdateEventByName(e *pb.Event) {
 	}
 }
 
+// DeleteEventByName deletes first found event with input name
 func (c *Calendar) DeleteEventByName(name string) {
 	c.mx.Lock()
 	defer c.mx.Unlock()
@@ -53,6 +58,7 @@ func (c *Calendar) DeleteEventByName(name string) {
 	}
 }
 
+//PrintEventNames outputs events that ve have
 func (c *Calendar) PrintEventNames() {
 	fmt.Println("Events that you have:")
 	c.mx.RLock()
