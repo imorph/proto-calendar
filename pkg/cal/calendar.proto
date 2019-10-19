@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package calendar;
+
+message Event {
+    string Name = 1;
+    google.protobuf.Timestamp StartTime = 2;
+    google.protobuf.Timestamp StopTime = 3;
+    enum EventType {
+        OTHER = 0;
+        MEETING = 1;
+        REMINDER = 2;
+    }
+    EventType Type = 4;
+}
+
+message Calendar {
+    repeated Event Events = 1;
+}
